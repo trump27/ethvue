@@ -1,17 +1,17 @@
 module.exports = {
-  entry: './index.js',
+  entry: './src/index.js',
   output: {
     path: './build',
-    filename: 'bundle.js'
+    filename: 'build.js'
   },
+  devtool: "#source-map",
   module: {
     preLoaders: [
         { test: /\.json$/, loader: 'json'},
+    ],
+    loaders: [
+      { test: /\.vue$/, exclude: /node_modules/, loader: 'vue' },
+      { test: /\.js$/, loader: 'babel!eslint', exclude: /node_modules/ }
     ]
-    // loaders: [
-    //     { test: /\.js$/, exclude: /node_modules/, loader: 'babel'},
-    //     { test: /\.jsx$/, exclude: /node_modules/, loader: 'babel'},
-    //     { test: /\.css$/, exclude: /static/, loader: 'style!css'}
-    // ]
   },
 };
