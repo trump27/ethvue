@@ -1,7 +1,8 @@
 module.exports = {
   entry: './src/index.js',
   output: {
-    path: './build',
+    path: './build/',
+    publicPath: 'build/',
     filename: 'build.js'
   },
   devtool: "#source-map",
@@ -14,4 +15,9 @@ module.exports = {
       { test: /\.js$/, loader: 'babel!eslint', exclude: /node_modules/ }
     ]
   },
+  vue: {
+    loaders: {
+      js: 'babel!eslint'
+    }
+  }
 };

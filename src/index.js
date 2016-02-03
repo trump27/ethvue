@@ -5,15 +5,17 @@ var Vue = require('vue')
 // Vue.use(VueRouter)
 // var router = new VueRouter();
 
-var Web3 = require('web3')
-var web3 = new Web3()
+// var Web3 = require('web3')
+// var web3 = new Web3()
 
 // router.start(App, '#app')
 
 var App = require('./app.vue')
-new Vue({
+var V = new Vue({
   el: '#app',
   components: {
     'app': App
   }
-});
+})
+
+module.exports = V

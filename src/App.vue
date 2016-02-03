@@ -1,5 +1,5 @@
 <template>
-<h2>hello</h2>
+<h2>hello!</h2>
 </template>
 
 <script>
@@ -16,12 +16,9 @@ export default {
   },
   created: () => {
     console.log('start')
-    // var web3 = new Web3()
-    // web3.setProvider(new web3.providers.HttpProvider('http://localhost:8545'))
 
     var coinbase = web3.eth.coinbase
     console.log(coinbase)
-    // this.web3 = web3
   }
 }
 </script>
