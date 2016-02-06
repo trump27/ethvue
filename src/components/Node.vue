@@ -2,7 +2,7 @@
   <div>
     <h2>Node</h2>
     <div class="panel panel-default">
-      <div class="panel-heading"><h3 class="panel-title">Info</h4></div>
+      <div class="panel-heading"><h3 class="panel-title">Info</h3></div>
       <div class="panel-body">
         <dl>
           <dt>node</dt><dd>{{node.node}}</dd>
@@ -11,12 +11,25 @@
           <dt>provider</dt><dd>{{node.providerhost}}</dd>
           <dt>defaultBlock</dt><dd>{{node.defaultBlock}}</dd>
           <dt>blockNumber</dt><dd>{{node.blockNumber}}</dd>
+          <dt>defaultAccount</dt><dd>{{defaultAccount}}</dd>
           <dt>coinbase</dt><dd>{{node.coinbase}}</dd>
           <dt>mining</dt><dd>{{node.mining}}</dd>
-          <dt></dt><dd></dd>
-          <dt></dt><dd></dd>
-          <dt></dt><dd></dd>
         </dl>
+      </div>
+    </div>
+
+    <div class="panel panel-default">
+      <div class="panel-heading"><h3 class="panel-title">Accounts</h3></div>
+      <div class="panel-body">
+        <ul class="list-group">
+          <li v-for="account in accounts" class="list-group-item">
+            <span>{{account.id}}
+            <span class="badge">{{account.balance}}</span></span>
+            <!--
+            <button @click="changeCoinbase(account.id)" class="btn btn-xs btn-danger pull-right">set coinbase</button>
+            -->
+          </li>
+        </ul>
       </div>
     </div>
   </div>
@@ -32,6 +45,10 @@ if (!web3.isConnected()) {
   alert('ノードに接続できません')
 }
 
+function getBalance (addresses) {
+  return web3.fromWei(web3.eth.getBalance(addresses), 'ether')
+}
+
 export default {
   data () {
     return {
@@ -44,7 +61,9 @@ export default {
         coinbase: '',
         blockNumber: '',
         mining: null
-      }
+      },
+      defaultAccount: '',
+      accounts: []
     }
   },
   created () {
@@ -58,8 +77,23 @@ export default {
     this.node.coinbase = web3.eth.coinbase
     this.node.mining = web3.eth.mining
     this.node.blockNumber = web3.eth.blockNumber
+    this.defaultAccount = web3.eth.defaultAccount
 
-    console.log(this.node.provider)
+    var accounts = web3.eth.accounts
+    for (let idx in accounts) {
+      // console.log(getBalance(accounts[idx]))
+      this.accounts.push({
+        id: accounts[idx],
+        balance: getBalance(accounts[idx])
+      })
+    }
+  },
+  methods: {
+    changeCoinbase (address) {
+      console.log(web3.eth.defaultAccount)
+      web3.eth.defaultAccount = address
+      console.log(web3.eth.defaultAccount)
+    }
   }
 }
 </script>

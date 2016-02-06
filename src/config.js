@@ -1,3 +1,3 @@
-export const config = {
+export var config = {
   provider: 'http://localhost:8545'
 }

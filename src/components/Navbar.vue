@@ -13,7 +13,7 @@
       <div class="collapse navbar-collapse" id="navmenu">
         <ul class="nav navbar-nav">
           <li><a v-link="'/node'">Node</a></li>
-          <li><a v-link="'/node'">Block</a></li>
+          <li><a v-link="'/block'">Blocks</a></li>
           <li><a v-link="{ path: '/home' }">Home</a></li>
         </ul>
         <!--

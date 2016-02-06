@@ -7,9 +7,11 @@ var router = new VueRouter()
 
 import App from './App.vue'
 import Node from './components/Node.vue'
+import Block from './components/Block.vue'
 router.map({
   '/': { component: Node },
-  '/base': { component: Node },
+  '/node': { component: Node },
+  '/block': { component: Block },
   '*': { component: Node }
 })
 
