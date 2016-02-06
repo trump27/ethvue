@@ -1,21 +1,16 @@
-var Vue = require('vue')
-// import VueRouter from 'vue-router'
-// import VueResource from 'vue-resource'
-// Vue.use(VueResource)
-// Vue.use(VueRouter)
-// var router = new VueRouter();
+import Vue from 'vue'
+import VueRouter from 'vue-router'
+import VueResource from 'vue-resource'
+Vue.use(VueResource)
+Vue.use(VueRouter)
+var router = new VueRouter()
 
-// var Web3 = require('web3')
-// var web3 = new Web3()
-
-// router.start(App, '#app')
-
-var App = require('./app.vue')
-var V = new Vue({
-  el: '#app',
-  components: {
-    'app': App
-  }
+import App from './App.vue'
+import Node from './components/Node.vue'
+router.map({
+  '/': { component: Node },
+  '/base': { component: Node },
+  '*': { component: Node }
 })
 
-module.exports = V
+router.start(App, '#app')

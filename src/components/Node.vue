@@ -1,0 +1,74 @@
+<template>
+  <div>
+    <h2>Node</h2>
+    <div class="panel panel-default">
+      <div class="panel-heading"><h3 class="panel-title">Info</h4></div>
+      <div class="panel-body">
+        <dl>
+          <dt>node</dt><dd>{{node.node}}</dd>
+          <dt>network</dt><dd>{{node.network}}</dd>
+          <dt>api</dt><dd>{{node.api}}</dd>
+          <dt>provider</dt><dd>{{node.providerhost}}</dd>
+          <dt>defaultBlock</dt><dd>{{node.defaultBlock}}</dd>
+          <dt>blockNumber</dt><dd>{{node.blockNumber}}</dd>
+          <dt>coinbase</dt><dd>{{node.coinbase}}</dd>
+          <dt>mining</dt><dd>{{node.mining}}</dd>
+          <dt></dt><dd></dd>
+          <dt></dt><dd></dd>
+          <dt></dt><dd></dd>
+        </dl>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import { config } from '../config.js'
+import Web3 from '../web3api.js'
+
+var web3 = new Web3()
+web3.setProvider(new web3.providers.HttpProvider(config.provider))
+if (!web3.isConnected()) {
+  alert('ノードに接続できません')
+}
+
+export default {
+  data () {
+    return {
+      node: {
+        network: '',
+        node: '',
+        api: '',
+        providerhost: '',
+        defaultBlock: '',
+        coinbase: '',
+        blockNumber: '',
+        mining: null
+      }
+    }
+  },
+  created () {
+    console.log('start node')
+
+    this.node.network = web3.version.network
+    this.node.node = web3.version.node
+    this.node.api = web3.version.api
+    this.node.providerhost = web3.currentProvider.host
+    this.node.defaultBlock = web3.eth.defaultBlock
+    this.node.coinbase = web3.eth.coinbase
+    this.node.mining = web3.eth.mining
+    this.node.blockNumber = web3.eth.blockNumber
+
+    console.log(this.node.provider)
+  }
+}
+</script>
+
+<style lang="stylus">
+dt
+  float left
+  clear left
+  width 120px
+dd
+  float left
+</style>

@@ -11,7 +11,7 @@ module.exports = {
         { test: /\.json$/, loader: 'json'},
     ],
     loaders: [
-      { test: /\.vue$/, exclude: /node_modules/, loader: 'vue' },
+      { test: /\.vue$/, loader: 'vue' },
       { test: /\.js$/, loader: 'babel!eslint', exclude: /node_modules/ }
     ]
   },
