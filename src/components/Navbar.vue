@@ -14,7 +14,8 @@
         <ul class="nav navbar-nav">
           <li><a v-link="'/node'">Node</a></li>
           <li><a v-link="'/block'">Blocks</a></li>
-          <li><a v-link="{ path: '/home' }">Home</a></li>
+          <li><a v-link="'/tx'">Transactions</a></li>
+          <li><a v-link="'/account'">Account</a></li>
         </ul>
         <!--
         <ul class="nav navbar-nav navbar-right">

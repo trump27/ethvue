@@ -97,12 +97,3 @@ export default {
   }
 }
 </script>
-
-<style lang="stylus">
-dt
-  float left
-  clear left
-  width 120px
-dd
-  float left
-</style>

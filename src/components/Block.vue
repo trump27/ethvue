@@ -17,13 +17,13 @@
       <div class="form-group">
         Start block number :
         <input v-model="searchFromBlock" @keyup.enter="searchBlock" type="text" class="form-control" size="5">
-        <button @click="searchBlock" class="btn btn-primary">Search</button>
+        <button @click="searchBlock" class="btn btn-primary">Search transactions</button>
         Current block number : {{node.blockNumber}}
       </div>
     </form>
 
     <div class="panel panel-default">
-      <div class="panel-heading"><h3 class="panel-title">transactions</h3></div>
+      <div class="panel-heading"><h3 class="panel-title">transactions in blocks</h3></div>
       <!--<div class="panel-body">transactions</div>-->
       <ul class="list-group">
         <li v-for="block in blocks" class="list-group-item block-item">
@@ -32,7 +32,13 @@
             <dt>miner</dt><dd>{{block.miner}}</dd>
             <dt>size</dt><dd>{{block.size}}</dd>
             <dt>timestamp</dt><dd>{{block.timestamp}}</dd>
-            <dt>transactions</dt><dd>{{block.transactions | json}}</dd>
+            <dt>transactions</dt>
+            <dd class="clearfix">
+              <span v-for="hash in block.transactions">
+                <a v-link="'/tx/' + hash">{{hash}}</a>
+                <!--<a v-link="{ path: 'tx', params: { hash: 'hash' }}">{{hash}}</a>-->
+              </span>
+            </dd>
           </dl>
         </li>
       </ul>
