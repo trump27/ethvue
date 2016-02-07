@@ -1,12 +1,12 @@
 <template>
   <div>
-    <h2>Transactions</h2>
+    <h2>Account</h2>
 
     <form class="form-inline">
       <div class="form-group">
         Hash :
-        <input v-model="searchTxHash" @keyup.enter="searchTx" type="text" class="form-control" size="60">
-        <button @click="searchTx" class="btn btn-primary">Search</button>
+        <input v-model="searchAccHash" @keyup.enter="searchTx(null)" type="text" class="form-control" size="60">
+        <button @click="searchTx(null)" class="btn btn-primary">Search</button>
       </div>
     </form>
 
@@ -21,8 +21,14 @@
             <dt>blockNumber</dt><dd>{{tx.blockNumber}}</dd>
             <dt>blockHash</dt><dd>{{tx.blockHash}}</dd>
             <dt>timestamp</dt><dd>{{tx.timestamp}}</dd>
-            <dt>from</dt><dd><a v-link="'/account/' + tx.from">{{tx.from}}</a></dd>
-            <dt>to</dt><dd><a v-link="'/account/' + tx.to">{{tx.to}}</a></dd>
+            <dt>from</dt><dd>
+              <a href="#" @click.prevent="searchTx(tx.from)">{{tx.from}}</a>
+              <span v-if="tx.from==searchAccHash" class="glyphicon glyphicon-arrow-right"></span>
+              </dd>
+            <dt>to</dt><dd>
+              <a href="#" @click.prevent="searchTx(tx.to)">{{tx.to}}</a>
+              <span v-if="tx.to==searchAccHash" class="glyphicon glyphicon-arrow-left"></span>
+              </dd>
             <dt>value</dt><dd>{{tx.value}}<span class="badge">{{tx.valueEther}}</span></dd>
             <dt>gasPrice</dt><dd>{{tx.gasPrice}}</dd>
             <dt>gas</dt><dd>{{tx.gas}}</dd>
@@ -48,16 +54,16 @@ if (!web3.isConnected()) {
 export default {
   data () {
     return {
-      searchTxHash: '',
+      searchAccHash: '',
       txs: []
     }
   },
   created () {
-    console.log('start tx')
+    console.log('start account')
 
     if (this.$route.params.hash) {
-      this.searchTxHash = this.$route.params.hash
-      this.txs.push(this.getTx(this.searchTxHash, null))
+      this.searchAccHash = this.$route.params.hash
+      this.searchTx(null)
     }
   },
 
@@ -72,18 +78,23 @@ export default {
       tx.timestamp = Date(block.timestamp)
       return tx
     },
-    searchTx () {
+    searchTx (newHash) {
       if (this.txs.length > 0) this.txs.splice(0, this.txs.length)
-      if (this.searchTxHash) {
-        this.txs.push(this.getTx(this.searchTxHash))
+      if (newHash) {
+        this.searchAccHash = newHash
       } else {
-        var blockNumber = web3.eth.blockNumber
-        var block = []
-        for (var i = blockNumber; i > 0; i--) {
-          block = web3.eth.getBlock(i)
-          if (block && block.transactions.length > 0) {
-            for (var j = 0; j < block.transactions.length; j++) {
-              this.txs.push(this.getTx(block.transactions[j], block))
+        this.searchAccHash = this.searchAccHash.trim()
+      }
+      var blockNumber = web3.eth.blockNumber
+      var block = []
+      // var tx = []
+      for (var i = blockNumber; i > 0; i--) {
+        block = web3.eth.getBlock(i)
+        if (block && block.transactions.length > 0) {
+          for (var j = 0; j < block.transactions.length; j++) {
+            var tx = this.getTx(block.transactions[j], block)
+            if (this.searchAccHash === tx.from || this.searchAccHash === tx.to) {
+              this.txs.push(this.getTx(block.transactions[j]))
             }
           }
         }

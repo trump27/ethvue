@@ -23,8 +23,9 @@
       <div class="panel-body">
         <ul class="list-group">
           <li v-for="account in accounts" class="list-group-item">
-            <span>{{account.id}}
-            <span class="badge">{{account.balance}}</span></span>
+            <span><a v-link="'/account/' + account.id">{{account.id}}</a>
+              <span class="badge">{{account.balance}}</span>
+            </span>
             <!--
             <button @click="changeCoinbase(account.id)" class="btn btn-xs btn-danger pull-right">set coinbase</button>
             -->

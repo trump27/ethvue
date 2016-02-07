@@ -17,6 +17,13 @@
   padding 0 0
   height 0
   transform translate3d(0, 0, 0)
+
+dt
+  float left
+  clear left
+  width 120px
+dd
+  float left
 </style>
 
 <script>
