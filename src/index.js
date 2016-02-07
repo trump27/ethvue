@@ -10,6 +10,7 @@ import Node from './components/Node.vue'
 import Block from './components/Block.vue'
 import Tx from './components/Tx.vue'
 import Account from './components/Account.vue'
+import Send from './components/Send.vue'
 router.map({
   '/': { component: Node },
   '/node': { component: Node },
@@ -18,6 +19,7 @@ router.map({
   '/tx/:hash': { component: Tx },
   '/account/': { component: Account },
   '/account/:hash': { component: Account },
+  '/send/': { component: Send },
   '*': { component: Node }
 })
 

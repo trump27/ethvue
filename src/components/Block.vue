@@ -49,6 +49,7 @@
 
 <script>
 import { config } from '../config.js'
+import { unixtime2date } from '../common.js'
 import Web3 from '../web3api.js'
 
 var web3 = new Web3()
@@ -91,7 +92,7 @@ export default {
             hash: block.hash,
             miner: block.miner,
             size: block.size,
-            timestamp: Date(block.timestamp),
+            timestamp: unixtime2date(block.timestamp),
             transactions: block.transactions
           })
         }

@@ -43,6 +43,7 @@
 
 <script>
 import { config } from '../config.js'
+import { unixtime2date } from '../common.js'
 import Web3 from '../web3api.js'
 
 var web3 = new Web3()
@@ -75,7 +76,7 @@ export default {
       if (!block) {
         block = web3.eth.getBlock(tx.blockHash)
       }
-      tx.timestamp = Date(block.timestamp)
+      tx.timestamp = unixtime2date(block.timestamp)
       return tx
     },
     searchTx (newHash) {
