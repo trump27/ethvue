@@ -3,24 +3,18 @@ import VueRouter from 'vue-router'
 import VueResource from 'vue-resource'
 Vue.use(VueResource)
 Vue.use(VueRouter)
-var router = new VueRouter()
+const router = new VueRouter()
 
-import App from './App.vue'
-import Node from './components/Node.vue'
-import Block from './components/Block.vue'
-import Tx from './components/Tx.vue'
-import Account from './components/Account.vue'
-import Send from './components/Send.vue'
 router.map({
-  '/': { component: Node },
-  '/node': { component: Node },
-  '/block': { component: Block },
-  '/tx': { component: Tx },
-  '/tx/:hash': { component: Tx },
-  '/account/': { component: Account },
-  '/account/:hash': { component: Account },
-  '/send/': { component: Send },
-  '*': { component: Node }
+  '/node': { component: require('./components/Node.vue') },
+  '/block': { component: require('./components/Block.vue') },
+  '/tx': { component: require('./components/Tx.vue') },
+  '/tx/:hash': { component: require('./components/Tx.vue') },
+  '/account/': { component: require('./components/Account.vue') },
+  '/account/:hash': { component: require('./components/Account.vue') },
+  '/send/': { component: require('./components/Send.vue') },
+  '*': { component: require('./components/Node.vue') }
 })
 
+const App = Vue.extend(require('./App.vue'))
 router.start(App, '#app')

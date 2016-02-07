@@ -6,7 +6,7 @@
       <div class="form-group">
         Hash :
         <input v-model="searchAccHash" @keyup.enter="searchTx(null)" type="text" class="form-control" size="60">
-        <button @click="searchTx(null)" class="btn btn-primary">Search</button>
+        <button @click.prevent="searchTx(null)" class="btn btn-primary">Search</button>
       </div>
     </form>
 

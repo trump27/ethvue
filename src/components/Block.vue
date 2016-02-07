@@ -17,7 +17,7 @@
       <div class="form-group">
         Start block number :
         <input v-model="searchFromBlock" @keyup.enter="searchBlock" type="text" class="form-control" size="5">
-        <button @click="searchBlock" class="btn btn-primary">Search transactions</button>
+        <button @click.prevent="searchBlock" class="btn btn-primary">Search transactions</button>
         Current block number : {{node.blockNumber}}
       </div>
     </form>
@@ -57,6 +57,7 @@ web3.setProvider(new web3.providers.HttpProvider(config.provider))
 if (!web3.isConnected()) {
   alert('ノードに接続できません')
 }
+console.log('test')
 
 export default {
   data () {

@@ -25,7 +25,7 @@
         <label for="sendEther">Value(ether)</label>
         <input type="text" v-model="sendEther" class="form-control" id="sendEther">
         <br>
-        <button @click="sendTransaction" class="btn btn-primary">Send transaction</button>
+        <button @click.prevent="sendTransaction" class="btn btn-primary">Send transaction</button>
       </div>
     </form>
     <div v-if="sendResult" class="alert alert-success">
@@ -64,7 +64,6 @@ export default {
       this.fromList.push({text: list[idx], value: list[idx]})
       this.toList.push({text: list[idx], value: list[idx]})
     }
-    console.log(this.fromList)
   },
 
   methods: {
@@ -92,8 +91,14 @@ export default {
         to: this.selectedTo,
         value: web3.toWei(this.sendEther, 'ether')
       }
-      this.sendResult = web3.eth.sendTransaction(sendObject)
-      console.log(this.sendResult)
+      var self = this
+      web3.eth.sendTransaction(sendObject, function (error, address) {
+        if (error) {
+          self.validateMsg = error
+        } else {
+          self.sendResult = address
+        }
+      })
     }
   }
 }
