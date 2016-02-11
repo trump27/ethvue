@@ -86,8 +86,10 @@ export default {
       if (this.blocks.length > 0) this.blocks.splice(0, this.blocks.length)
       var block = []
       for (var i = this.searchFromBlock; i < this.node.blockNumber; i++) {
-        block = web3.eth.getBlock(i)
-        if (block.transactions.length > 0) {
+        // block = web3.eth.getBlock(i)
+        // if (block.transactions.length > 0) {
+        if (web3.eth.getBlockTransactionCount(i) > 0) {
+          block = web3.eth.getBlock(i)
           this.blocks.unshift({
             number: block.number,
             hash: block.hash,

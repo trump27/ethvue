@@ -90,8 +90,10 @@ export default {
       var block = []
       // var tx = []
       for (var i = blockNumber; i > 0; i--) {
-        block = web3.eth.getBlock(i)
-        if (block && block.transactions.length > 0) {
+        // block = web3.eth.getBlock(i)
+        // if (block && block.transactions.length > 0) {
+        if (web3.eth.getBlockTransactionCount(i) > 0) {
+          block = web3.eth.getBlock(i)
           for (var j = 0; j < block.transactions.length; j++) {
             var tx = this.getTx(block.transactions[j], block)
             if (this.searchAccHash === tx.from || this.searchAccHash === tx.to) {

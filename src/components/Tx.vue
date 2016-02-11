@@ -81,8 +81,10 @@ export default {
         var blockNumber = web3.eth.blockNumber
         var block = []
         for (var i = blockNumber; i > 0; i--) {
-          block = web3.eth.getBlock(i)
-          if (block && block.transactions.length > 0) {
+          // block = web3.eth.getBlock(i)
+          // if (block && block.transactions.length > 0) {
+          if (web3.eth.getBlockTransactionCount(i) > 0) {
+            block = web3.eth.getBlock(i)
             for (var j = 0; j < block.transactions.length; j++) {
               this.txs.push(this.getTx(block.transactions[j], block))
             }

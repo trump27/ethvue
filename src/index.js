@@ -14,6 +14,7 @@ router.map({
   '/account/:hash': { component: require('./components/Account.vue') },
   '/send': { component: require('./components/Send.vue') },
   '/sol': { component: require('./components/Sol.vue') },
+  '/labo': { component: require('./components/Labo.vue') },
   '*': { component: require('./components/Node.vue') }
 })
 
