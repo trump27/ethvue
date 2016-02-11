@@ -18,6 +18,7 @@
           <li><a v-link="'/account'">Account</a></li>
           <li><a v-link="'/send'">Send</a></li>
           <li><a v-link="'/sol'">Sol</a></li>
+          <li><a v-link="'/labo'">Labo</a></li>
         </ul>
         <!--
         <ul class="nav navbar-nav navbar-right">

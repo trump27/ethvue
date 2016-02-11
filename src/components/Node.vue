@@ -1,6 +1,7 @@
 <template>
   <div>
     <h2>Node</h2>
+
     <div class="panel panel-default">
       <div class="panel-heading"><h3 class="panel-title">Info</h3></div>
       <div class="panel-body">
@@ -17,6 +18,13 @@
         </dl>
       </div>
     </div>
+
+    <div class="form-inline">
+      <input v-model="node.providerhost" type="text" class="form-control">
+      <button @click.prevent="changeProvider" class="btn btn-primary">Change provider</button>
+      <button @click.prevent="resetProvider" class="btn btn-info">Reset provider</button>
+    </div>
+    <br>
 
     <div class="panel panel-default">
       <div class="panel-heading"><h3 class="panel-title">Accounts</h3></div>
@@ -40,11 +48,12 @@
 import { config } from '../config.js'
 import Web3 from '../web3api.js'
 
-var web3 = new Web3()
-web3.setProvider(new web3.providers.HttpProvider(config.provider))
-if (!web3.isConnected()) {
-  alert('ノードに接続できません')
-}
+var web3 = Web3.web3()
+// var web3 = new Web3()
+// web3.setProvider(new web3.providers.HttpProvider(config.provider))
+// if (!web3.isConnected()) {
+//   alert('ノードに接続できません')
+// }
 
 function getBalance (addresses) {
   return web3.fromWei(web3.eth.getBalance(addresses), 'ether')
@@ -82,7 +91,6 @@ export default {
 
     var accounts = web3.eth.accounts
     for (let idx in accounts) {
-      // console.log(getBalance(accounts[idx]))
       this.accounts.push({
         id: accounts[idx],
         balance: getBalance(accounts[idx])
@@ -94,6 +102,14 @@ export default {
       console.log(web3.eth.defaultAccount)
       web3.eth.defaultAccount = address
       console.log(web3.eth.defaultAccount)
+    },
+    changeProvider () {
+      localStorage.setItem('providerHost', this.node.providerhost)
+      this.node.providerhost = web3.currentProvider.host
+    },
+    resetProvider () {
+      this.node.providerhost = config.provider
+      this.changeProvider()
     }
   }
 }
