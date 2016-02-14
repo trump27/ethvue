@@ -3,6 +3,7 @@
  * @return {string} date string
  */
 export function unixtime2date (ux) {
+  if (!ux) return ''
   var d = new Date(ux * 1000)
   return [
     d.getFullYear(),
