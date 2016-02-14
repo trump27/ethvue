@@ -2010,7 +2010,7 @@ var toAscii = function(hex) {
 };
 
 /**
- * Should be called to get hex representation (prefixed by 0x) of utf8 string
+ * Should be called to get hex representation (prefixed by 0x) of utf8 a string
  *
  * @method fromUtf8
  * @param {String} string
@@ -2405,7 +2405,7 @@ module.exports = {
 
 },{"bignumber.js":"bignumber.js","utf8":83}],21:[function(require,module,exports){
 module.exports={
-    "version": "0.15.1"
+    "version": "0.15.2"
 }
 
 },{}],22:[function(require,module,exports){
@@ -2723,7 +2723,7 @@ module.exports = Batch;
     You should have received a copy of the GNU Lesser General Public License
     along with web3.js.  If not, see <http://www.gnu.org/licenses/>.
 */
-/** 
+/**
  * @file contract.js
  * @author Marek Kotewicz <marek@ethdev.com>
  * @date 2014
@@ -2785,7 +2785,7 @@ var addEventsToContract = function (contract) {
 
     var All = new AllEvents(contract._eth._requestManager, events, contract.address);
     All.attachToContract(contract);
-    
+
     events.map(function (json) {
         return new SolidityEvent(contract._eth._requestManager, json, contract.address);
     }).forEach(function (e) {
@@ -2813,7 +2813,7 @@ var checkForContractAddress = function(contract, callback){
 
             // stop watching after 50 blocks (timeout)
             if (count > 50) {
-                
+
                 filter.stopWatching();
                 callbackFired = true;
 
@@ -2833,7 +2833,7 @@ var checkForContractAddress = function(contract, callback){
 
                             if(callbackFired || !code)
                                 return;
-                            
+
                             filter.stopWatching();
                             callbackFired = true;
 
@@ -2875,6 +2875,62 @@ var ContractFactory = function (eth, abi) {
     this.eth = eth;
     this.abi = abi;
 
+    /**
+     * Should be called to create new contract on a blockchain
+     *
+     * @method new
+     * @param {Any} contract constructor param1 (optional)
+     * @param {Any} contract constructor param2 (optional)
+     * @param {Object} contract transaction object (required)
+     * @param {Function} callback
+     * @returns {Contract} returns contract instance
+     */
+    this.new = function () {
+        var contract = new Contract(this.eth, this.abi);
+
+        // parse arguments
+        var options = {}; // required!
+        var callback;
+
+        var args = Array.prototype.slice.call(arguments);
+        if (utils.isFunction(args[args.length - 1])) {
+            callback = args.pop();
+        }
+
+        var last = args[args.length - 1];
+        if (utils.isObject(last) && !utils.isArray(last)) {
+            options = args.pop();
+        }
+
+        var bytes = encodeConstructorParams(this.abi, args);
+        options.data += bytes;
+
+        if (callback) {
+
+            // wait for the contract address adn check if the code was deployed
+            this.eth.sendTransaction(options, function (err, hash) {
+                if (err) {
+                    callback(err);
+                } else {
+                    // add the transaction hash
+                    contract.transactionHash = hash;
+
+                    // call callback for the first time
+                    callback(null, contract);
+
+                    checkForContractAddress(contract, callback);
+                }
+            });
+        } else {
+            var hash = this.eth.sendTransaction(options);
+            // add the transaction hash
+            contract.transactionHash = hash;
+            checkForContractAddress(contract);
+        }
+
+        return contract;
+    };
+
     this.new.getData = this.getData.bind(this);
 };
 
@@ -2889,61 +2945,7 @@ var ContractFactory = function (eth, abi) {
     //return new ContractFactory(abi);
 //};
 
-/**
- * Should be called to create new contract on a blockchain
- * 
- * @method new
- * @param {Any} contract constructor param1 (optional)
- * @param {Any} contract constructor param2 (optional)
- * @param {Object} contract transaction object (required)
- * @param {Function} callback
- * @returns {Contract} returns contract instance
- */
-ContractFactory.prototype.new = function () {
-    var contract = new Contract(this.eth, this.abi);
 
-    // parse arguments
-    var options = {}; // required!
-    var callback;
-
-    var args = Array.prototype.slice.call(arguments);
-    if (utils.isFunction(args[args.length - 1])) {
-        callback = args.pop();
-    }
-
-    var last = args[args.length - 1];
-    if (utils.isObject(last) && !utils.isArray(last)) {
-        options = args.pop();
-    }
-
-    var bytes = encodeConstructorParams(this.abi, args);
-    options.data += bytes;
-
-    if (callback) {
-
-        // wait for the contract address adn check if the code was deployed
-        this.eth.sendTransaction(options, function (err, hash) {
-            if (err) {
-                callback(err);
-            } else {
-                // add the transaction hash
-                contract.transactionHash = hash;
-
-                // call callback for the first time
-                callback(null, contract);
-
-                checkForContractAddress(contract, callback);
-            }
-        });
-    } else {
-        var hash = this.eth.sendTransaction(options);
-        // add the transaction hash
-        contract.transactionHash = hash;
-        checkForContractAddress(contract);
-    }
-
-    return contract;
-};
 
 /**
  * Should be called to get access to existing contract on a blockchain
@@ -2957,14 +2959,14 @@ ContractFactory.prototype.new = function () {
 ContractFactory.prototype.at = function (address, callback) {
     var contract = new Contract(this.eth, this.abi, address);
 
-    // this functions are not part of prototype, 
+    // this functions are not part of prototype,
     // because we dont want to spoil the interface
     addFunctionsToContract(contract);
     addEventsToContract(contract);
-    
+
     if (callback) {
         callback(null, contract);
-    } 
+    }
     return contract;
 };
 
@@ -3003,7 +3005,6 @@ var Contract = function (eth, abi, address) {
 };
 
 module.exports = ContractFactory;
-
 
 },{"../solidity/coder":7,"../utils/utils":20,"./allevents":23,"./event":27,"./function":31}],26:[function(require,module,exports){
 /*
@@ -3361,7 +3362,7 @@ var getOptions = function (options) {
 
     if (utils.isString(options)) {
         return options;
-    } 
+    }
 
     options = options || {};
 
@@ -3371,14 +3372,14 @@ var getOptions = function (options) {
         return (utils.isArray(topic)) ? topic.map(toTopic) : toTopic(topic);
     });
 
-    // lazy load
     return {
         topics: options.topics,
+        from: options.from,
         to: options.to,
         address: options.address,
         fromBlock: formatters.inputBlockNumberFormatter(options.fromBlock),
-        toBlock: formatters.inputBlockNumberFormatter(options.toBlock) 
-    }; 
+        toBlock: formatters.inputBlockNumberFormatter(options.toBlock)
+    };
 };
 
 /**
@@ -3386,7 +3387,7 @@ Adds the callback and sets up the methods, to iterate over the results.
 
 @method getLogsAtStart
 @param {Object} self
-@param {funciton} 
+@param {funciton}
 */
 var getLogsAtStart = function(self, callback){
     // call getFilterLogs for the first watch callback start
@@ -3476,7 +3477,7 @@ var Filter = function (requestManager, options, methods, formatter, callback) {
                 pollFilter(self);
 
             // start to watch immediately
-            if(callback) {
+            if(typeof callback === 'function') {
                 return self.watch(callback);
             }
         }
@@ -3749,7 +3750,7 @@ var outputLogFormatter = function(log) {
 */
 var inputPostFormatter = function(post) {
 
-    post.payload = utils.toHex(post.payload);
+    // post.payload = utils.toHex(post.payload);
     post.ttl = utils.fromDecimal(post.ttl);
     post.workToProve = utils.fromDecimal(post.workToProve);
     post.priority = utils.fromDecimal(post.priority);
@@ -3761,7 +3762,8 @@ var inputPostFormatter = function(post) {
 
     // format the following options
     post.topics = post.topics.map(function(topic){
-        return utils.fromUtf8(topic);
+        // convert only if not hex
+        return (topic.indexOf('0x') === 0) ? topic : utils.fromUtf8(topic);
     });
 
     return post; 
@@ -3780,19 +3782,19 @@ var outputPostFormatter = function(post){
     post.sent = utils.toDecimal(post.sent);
     post.ttl = utils.toDecimal(post.ttl);
     post.workProved = utils.toDecimal(post.workProved);
-    post.payloadRaw = post.payload;
-    post.payload = utils.toUtf8(post.payload);
+    // post.payloadRaw = post.payload;
+    // post.payload = utils.toAscii(post.payload);
 
-    if (utils.isJson(post.payload)) {
-        post.payload = JSON.parse(post.payload);
-    }
+    // if (utils.isJson(post.payload)) {
+    //     post.payload = JSON.parse(post.payload);
+    // }
 
     // format the following options
     if (!post.topics) {
         post.topics = [];
     }
     post.topics = post.topics.map(function(topic){
-        return utils.toUtf8(topic);
+        return utils.toAscii(topic);
     });
 
     return post;
@@ -4572,7 +4574,7 @@ IpcProvider.prototype._parseResponse = function(data) {
             // start timeout to cancel all requests
             clearTimeout(_this.lastChunkTimeout);
             _this.lastChunkTimeout = setTimeout(function(){
-                _this.timeout();
+                _this._timeout();
                 throw errors.InvalidResponse(data);
             }, 1000 * 15);
 
@@ -5205,6 +5207,13 @@ var methods = function () {
         inputFormatter: [formatters.inputTransactionFormatter]
     });
 
+    var sign = new Method({
+        name: 'sign',
+        call: 'eth_sign',
+        params: 2,
+        inputFormatter: [formatters.inputAddressFormatter, null]
+    });
+
     var call = new Method({
         name: 'call',
         call: 'eth_call',
@@ -5267,6 +5276,7 @@ var methods = function () {
         estimateGas,
         sendRawTransaction,
         sendTransaction,
+        sign,
         compileSolidity,
         compileLLL,
         compileSerpent,
@@ -5720,7 +5730,8 @@ Property.prototype.extractCallback = function (args) {
  */
 Property.prototype.attachToObject = function (obj) {
     var proto = {
-        get: this.buildGet() 
+        get: this.buildGet(),
+        enumerable: true 
     };
 
     var names = this.name.split('.');

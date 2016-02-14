@@ -15,6 +15,7 @@ router.map({
   '/send': { component: require('./components/Send.vue') },
   '/sol': { component: require('./components/Sol.vue') },
   '/labo': { component: require('./components/Labo.vue') },
+  '/contract': { component: require('./components/Contract.vue') },
   '*': { component: require('./components/Node.vue') }
 })
 
